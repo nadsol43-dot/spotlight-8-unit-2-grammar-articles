@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Grammar Draft: Articles (A/An, The, Ø)</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #e2e8f0;
+    --a-color: #2563eb;
+    --a-bg: #eff6ff;
+    --a-border: #bfdbfe;
+    --the-color: #7c3aed;
+    --the-bg: #f5f3ff;
+    --the-border: #ddd6fe;
+    --zero-color: #059669;
+    --zero-bg: #ecfdf5;
+    --zero-border: #a7f3d0;
+    --warn-color: #dc2626;
+    --warn-bg: #fef2f2;
+    --accent: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 24px 16px 60px;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.18);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .hero p {
+    color: #cbd5e1;
+    font-size: 14px;
+    max-width: 680px;
+  }
+
+  /* Legend Pills */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .legend-card {
+    border-radius: 16px;
+    padding: 18px 20px;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .legend-a { background: var(--a-bg); border-color: var(--a-border); }
+  .legend-the { background: var(--the-bg); border-color: var(--the-border); }
+  .legend-zero { background: var(--zero-bg); border-color: var(--zero-border); }
+
+  .pill-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .legend-a .pill-icon { background: var(--a-color); }
+  .legend-the .pill-icon { background: var(--the-color); }
+  .legend-zero .pill-icon { background: var(--zero-color); }
+
+  .legend-card h3 { font-size: 16px; margin-bottom: 4px; }
+  .legend-card p { font-size: 13px; color: var(--muted); }
+
+  /* Filter Tabs */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .tab-btn {
+    border: none;
+    background: transparent;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { background: #f1f5f9; color: var(--text); }
+  .tab-btn.active {
+    background: #0f172a;
+    color: #fff;
+  }
+
+  /* Section Blocks */
+  .section-block {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    background: #0f172a;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Story Comic Strip (Block 1) */
+  .comic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .comic-panel {
+    border-radius: 14px;
+    padding: 18px;
+    border: 2px solid var(--border);
+    position: relative;
+  }
+  .comic-panel.panel-a { border-color: var(--a-border); background: #f8fbff; }
+  .comic-panel.panel-the { border-color: var(--the-border); background: #faf8ff; }
+  .comic-panel.panel-zero { border-color: var(--zero-border); background: #f6fef9; }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .tag-a { background: var(--a-color); color: #fff; }
+  .tag-the { background: var(--the-color); color: #fff; }
+  .tag-zero { background: var(--zero-color); color: #fff; }
+  .tag-not { background: var(--warn-color); color: #fff; }
+
+  .example-box {
+    background: #fff;
+    border-left: 4px solid #cbd5e1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 13.5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .example-box.ex-a { border-left-color: var(--a-color); }
+  .example-box.ex-the { border-left-color: var(--the-color); }
+  .example-box.ex-zero { border-left-color: var(--zero-color); }
+
+  .hl-a { color: var(--a-color); font-weight: 800; background: #dbeafe; padding: 1px 5px; border-radius: 4px; }
+  .hl-the { color: var(--the-color); font-weight: 800; background: #ede9fe; padding: 1px 5px; border-radius: 4px; }
+  .hl-zero { color: var(--zero-color); font-weight: 800; background: #d1fae5; padding: 1px 5px; border-radius: 4px; }
+  .strike { text-decoration: line-through; color: var(--warn-color); opacity: 0.85; }
+
+  /* Wheel / Grid for A/An = 1 / per */
+  .mini-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .mini-card {
+    background: var(--a-bg);
+    border: 1px solid var(--a-border);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+  }
+  .mini-card strong { display: block; color: var(--a-color); margin-bottom: 4px; font-size: 12px; text-transform: uppercase; }
+
+  /* Contrast VS Row */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 720px) {
+    .vs-grid { grid-template-columns: 1fr; }
+    .vs-badge { display: none; }
+  }
+  .vs-badge {
+    align-self: center;
+    background: #1e293b;
+    color: #fff;
+    font-weight: 800;
+    font-size: 11px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .vs-box {
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .vs-box.left-zero { background: var(--zero-bg); border-color: var(--zero-border); }
+  .vs-box.right-the { background: var(--the-bg); border-color: var(--the-border); }
+  .vs-box.left-a { background: var(--a-bg); border-color: var(--a-border); }
+  .vs-box.right-zero { background: var(--zero-bg); border-color: var(--zero-border); }
+
+  /* City & Places Filter Flow */
+  .flow-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .place-list {
+    list-style: none;
+    margin-top: 10px;
+  }
+  .place-list li {
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 13.5px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .place-list li:last-child { border-bottom: none; }
+
+  .svg-banner {
+    width: 100%;
+    height: 90px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <span class="hero-badge">Черновик визуализации • Visual Learning Draft</span>
+      <h1>Артикли в английском: 6 визуальных схем вместо 25 правил</h1>
+      <p>Все правила из 4 страниц учебника сгруппированы в наглядные смысловые блоки, контрастные пары («Одиночный vs. Группа», «Цель vs. Здание») и визуальные фильтры.</p>
+    </div>
+  </div>
+
+  <!-- COLOR CODE LEGEND -->
+  <div class="legend">
+    <div class="legend-card legend-a">
+      <div class="pill-icon">A/An</div>
+      <div>
+        <h3>Один из многих / Любой / = 1</h3>
+        <p>Только <b>исчисляемые в ед. ч.</b> Появляется впервые, равен «один» (one) или «в/за каждый» (per/every).</p>
+      </div>
+    </div>
+    <div class="legend-card legend-the">
+      <div class="pill-icon">The</div>
+      <div>
+        <h3>Тот самый / Уникальный / Сеть</h3>
+        <p>Любое число и тип. Уже знаком из контекста, единственный в мире, либо объединяет группу/цепь.</p>
+      </div>
+    </div>
+    <div class="legend-card legend-zero">
+      <div class="pill-icon">Ø</div>
+      <div>
+        <h3>Нулевой (Без артикля)</h3>
+        <p>Предметы вообще (мн. ч.), имена, одиночные точки на карте, бытовые категории и здания по назначению.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="filterSections('all', this)">Все 6 блоков (Полный обзор)</button>
+    <button class="tab-btn" onclick="filterSections('s1', this)">1. Базовая логика + A/An = Per</button>
+    <button class="tab-btn" onclick="filterSections('s2', this)">2. География (Карта контрастов)</button>
+    <button class="tab-btn" onclick="filterSections('s3', this)">3. Места в городе и бренды</button>
+    <button class="tab-btn" onclick="filterSections('s4', this)">4. Люди, титулы, уникальное</button>
+    <button class="tab-btn" onclick="filterSections('s5', this)">5. Цель vs. Здание + Быт (Ø)</button>
+  </div>
+
+  <!-- BLOCK 1: CORE LOGIC -->
+  <div class="section-block" data-sec="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Базовая логика: «Впервые в кадре» → «Уже знакомый» → «Категория вообще»</div>
+      <div class="section-sub">Страница 1 учебника</div>
+    </div>
+
+    <div class="comic-grid">
+      <!-- Panel 1: A/An -->
+      <div class="comic-panel panel-a">
+        <span class="tag tag-a">Шаг 1 • A / An</span>
+        <h4>Неизвестный ранее предмет (Ед. ч.)</h4>
+        <div class="svg-banner">
+          <svg width="200" height="70" viewBox="0 0 200 70">
+            <circle cx="45" cy="35" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+            <text x="45" y="40" text-anchor="middle" font-size="18">🐶</text>
+            <circle cx="100" cy="35" r="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+            <text x="100" y="40" text-anchor="middle" font-size="14" fill="#64748b">?</text>
+            <circle cx="145" cy="35" r="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+            <text x="145" y="40" text-anchor="middle" font-size="14" fill="#64748b">?</text>
+          </svg>
+        </div>
+        <p style="font-size:13px;color:var(--muted)">Называем один предмет из множества впервые или в значении «один»:</p>
+        <div class="example-box ex-a">
+          • I saw <span class="hl-a">a</span> dog chasing cars.<br>
+          • Could you give me <span class="hl-a">an</span> apple?<br>
+          • Pete found <span class="hl-a">a</span> kitten in the park...
+        </div>
+      </div>
+
+      <!-- Panel 2: The -->
+      <div class="comic-panel panel-the">
+        <span class="tag tag-the">Шаг 2 • The</span>
+        <h4>Уже упомянут или ясен из контекста</h4>
+        <div class="svg-banner">
+          <svg width="200" height="70" viewBox="0 0 200 70">
+            <circle cx="100" cy="35" r="24" fill="#ede9fe" stroke="#7c3aed" stroke-width="3"/>
+            <text x="100" y="42" text-anchor="middle" font-size="22">🐱</text>
+            <path d="M55 35 L70 35" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)"/>
+            <text x="35" y="39" font-size="11" font-weight="bold" fill="#7c3aed">ТОТ ЖЕ!</text>
+          </svg>
+        </div>
+        <p style="font-size:13px;color:var(--muted)">Ед. ч., мн. ч. или неисчисляемое — когда мы точно знаем, о чём речь:</p>
+        <div class="example-box ex-the">
+          • ...He took <span class="hl-the">the</span> kitten home.<br>
+          • <span class="hl-the">The</span> book <i>that I borrowed from you</i> is interesting.
+        </div>
+      </div>
+
+      <!-- Panel 3: Zero Plural -->
+      <div class="comic-panel panel-zero">
+        <span class="tag tag-zero">Обобщение • Ø (Мн. ч.)</span>
+        <h4>Вся группа / класс предметов целиком</h4>
+        <div class="svg-banner">
+          <svg width="200" height="70" viewBox="0 0 200 70">
+            <rect x="25" y="12" width="150" height="46" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="100" y="42" text-anchor="middle" font-size="20">🚗 🚙 🚕 = ВСЕ</text>
+          </svg>
+        </div>
+        <p style="font-size:13px;color:var(--muted)"><b>The никогда не ставится</b> перед мн. ч., если речь о всей группе вообще:</p>
+        <div class="example-box ex-zero">
+          • <span class="hl-zero">Ø</span> <b>Cars</b> did not exist 200 years ago.<br>
+          <span class="strike">NOT: The cars did not exist...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-block: A/An = ONE / PER + Illnesses -->
+    <h4 style="margin: 18px 0 8px; font-size: 15px;">⚡ Спец-функции <span class="hl-a">A / An</span> = «один (1)» или «в / за каждый (per / every)»</h4>
+    <div class="mini-cards">
+      <div class="mini-card">
+        <strong>⏱️ Частота (= per)</strong>
+        three times <span class="hl-a">a</span> day<br>
+        once <span class="hl-a">a</span> week
+      </div>
+      <div class="mini-card">
+        <strong>🏎️ Скорость и расход</strong>
+        60 km <span class="hl-a">an</span> hour<br>
+        10 miles <span class="hl-a">a</span> litre
+      </div>
+      <div class="mini-card">
+        <strong>💷 Валюта, дроби, меры</strong>
+        <span class="hl-a">a</span> pound (фунт)<br>
+        <span class="hl-a">a</span> third (1/3), <span class="hl-a">a</span> mile
+      </div>
+      <div class="mini-card" style="background:#fff7ed;border-color:#fed7aa">
+        <strong style="color:#ea580c">🤒 Болезни (Контраст!)</strong>
+        <b>С артиклем A:</b> <span class="hl-a">a</span> cold, <span class="hl-a">a</span> fever, <span class="hl-a">a</span> headache, <span class="hl-a">(a)</span> stomachache<br>
+        <b>НО без (Ø):</b> <span class="hl-zero">flu, pneumonia, tonsillitis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 2: VISUAL GEOGRAPHY -->
+  <div class="section-block" data-sec="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Географическая шпаргалка: «Одиночный объект (Ø) vs. Цепь / Поток (THE)»</div>
+      <div class="section-sub">Страницы 2–4 учебника</div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:16px;">Главный секрет географии в английском: <b>одиночная точка или территория = без артикля (Ø)</b>, а <b>группа, цепь или движущаяся/большая вода = THE</b>.</p>
+
+    <!-- Row 1: Mountains -->
+    <div class="vs-grid">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Одна вершина</span>
+        <h4>⛰️ Отдельная гора</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-zero">Ø</span> <b>Mount Etna</b> (гора Этна)</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Горная цепь</span>
+        <h4>🏔️⛰️🏔️ Много гор (цепь)</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-the">the</span> <b>Himalayas</b> (Гималаи)</p>
+      </div>
+    </div>
+
+    <!-- Row 2: Islands -->
+    <div class="vs-grid">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Один остров</span>
+        <h4>🏝️ Отдельный остров</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-zero">Ø</span> <b>Tasmania</b>, <span class="hl-zero">Ø</span> <b>Malta</b></p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Группа островов</span>
+        <h4>🏝️🏝️🏝️ Архипелаг</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-the">the</span> <b>Bahamas</b>, <span class="hl-the">the</span> <b>Channel Islands</b>, <span class="hl-the">the</span> <b>Solomon Islands</b></p>
+      </div>
+    </div>
+
+    <!-- Row 3: Water -->
+    <div class="vs-grid">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Озеро со словом Lake</span>
+        <h4>🏞️ Lake + Название</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-zero">Ø</span> <b>Lake Michigan</b>, <span class="hl-zero">Ø</span> <b>Lake Baikal</b></p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Реки, моря, океаны (+ озеро без слова Lake)</span>
+        <h4>🌊 Водные потоки и бассейны</h4>
+        <p style="font-size:13px;margin-top:4px;"><span class="hl-the">the</span> <b>Thames</b>, <span class="hl-the">the</span> <b>Mediterranean Sea</b>, <span class="hl-the">the</span> <b>Pacific Ocean</b>, НО: <span class="hl-the">the</span> <b>Baikal</b> (без слова <i>Lake</i>!)</p>
+      </div>
+    </div>
+
+    <!-- Row 4: Land & Streets vs Deserts & Exceptions -->
+    <div class="vs-grid" style="margin-bottom:0">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Континенты, страны, города, парки, улицы</span>
+        <h4>📍 Точки и территории на карте</h4>
+        <p style="font-size:13px;margin-top:4px;">
+          • Континенты: <span class="hl-zero">Ø</span> <b>Asia</b><br>
+          • Страны и города: <span class="hl-zero">Ø</span> <b>Russia</b>, <span class="hl-zero">Ø</span> <b>Australia</b>, <span class="hl-zero">Ø</span> <b>Milan</b><br>
+          • Парки и улицы: <span class="hl-zero">Ø</span> <b>Hyde Park</b>, <span class="hl-zero">Ø</span> <b>Smith Street</b>
+        </p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Пустыни и особое исключение улицы</span>
+        <h4>🏜️ Пустыни + The High Street</h4>
+        <p style="font-size:13px;margin-top:4px;">
+          • Пустыни (всегда с <i>the</i>): <span class="hl-the">the</span> <b>Kalahari Desert</b><br>
+          • Исключение для улиц: <span class="hl-the">the</span> <b>High Street</b> (главная торговая улица города)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 3: CITY PLACES & BRANDS -->
+  <div class="section-block" data-sec="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Городские места, отели и пресса: База (THE) vs. 2 фильтра-исключения (Ø)</div>
+      <div class="section-sub">Страницы 2 и 4 учебника</div>
+    </div>
+
+    <div class="flow-row">
+      <!-- Column 1: Default THE -->
+      <div class="comic-panel panel-the">
+        <span class="tag tag-the">Базовое правило • THE</span>
+        <h4>Культурные места, отели, пресса</h4>
+        <ul class="place-list">
+          <li><span>🎭 Театры / Кино</span> <b><span class="hl-the">the</span> Regent Theatre, <span class="hl-the">the</span> Apollo</b></li>
+          <li><span>🏨 Отели / Рестораны</span> <b><span class="hl-the">the</span> Savoy, <span class="hl-the">the</span> Atrium, <span class="hl-the">the</span> Black Swan Hotel</b></li>
+          <li><span>🖼️ Музеи / Галереи</span> <b><span class="hl-the">the</span> Louvre, <span class="hl-the">the</span> Tretyakov Art Gallery</b></li>
+          <li><span>📰 Газеты и ряд журналов</span> <b><span class="hl-the">the</span> Times of London, <span class="hl-the">the</span> New Yorker</b></li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Exception Filters Ø -->
+      <div class="comic-panel panel-zero">
+        <span class="tag tag-zero">2 фильтра-исключения • Ø (Без артикля)</span>
+        <h4>Когда THE исчезает перед названием места:</h4>
+        <div class="example-box ex-zero" style="margin-top:12px;">
+          <b>Фильтр 1: [Имя человека / Место] + [Объект] (из 2 слов)</b><br>
+          Первое слово — личное имя или город/место:<br>
+          • <span class="hl-zero">Ø</span> <b>Victoria Station</b> (вокзал Виктории)<br>
+          • <span class="hl-zero">Ø</span> <b>Moscow University</b> (Московский университет)<br>
+          <small style="color:var(--muted)"><i>(Сравните: <b>the</b> Black Swan Hotel — «Чёрный лебедь» не имя человека и не город!)</i></small>
+        </div>
+        <div class="example-box ex-zero" style="margin-top:10px;">
+          <b>Фильтр 2: Имя основателя на -s или -'s</b><br>
+          Магазины, рестораны, отели, банки с именем владельца:<br>
+          • <span class="hl-zero">Ø</span> <b>Barclays Bank</b>, <span class="hl-zero">Ø</span> <b>Brown's Hotel</b>, <span class="hl-zero">Ø</span> <b>Selfridges</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 4: PEOPLE, TITLES, UNIQUE, MUSIC -->
+  <div class="section-block" data-sec="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Люди, титулы, уникальные объекты и музыка vs. спорт</div>
+      <div class="section-sub">Страницы 2–3 учебника</div>
+    </div>
+
+    <!-- Titles & People Contrast -->
+    <div class="vs-grid">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Один человек / Титул с именем / Пост</span>
+        <h4>👤 Конкретное имя или должность</h4>
+        <p style="font-size:13px;margin-top:6px;">
+          • Личные имена: <span class="hl-zero">Ø</span> <b>Celia</b>, <span class="hl-zero">Ø</span> <b>Nathan</b><br>
+          • Титул + Имя: <span class="hl-zero">Ø</span> <b>King Henry VIII</b><br>
+          • Пост / должность: <i>He became <span class="hl-zero">Ø</span> <b>president</b> of the company.</i>
+        </p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Вся семья / Категория людей / Глава без имени</span>
+        <h4>👨‍👩‍👧‍👦 Группы людей и уникальные титулы</h4>
+        <p style="font-size:13px;margin-top:6px;">
+          • Семья (фамилия + s): <span class="hl-the">the</span> <b>Jacksons</b><br>
+          • Прилагательное = класс людей: <span class="hl-the">the</span> <b>young</b>, <span class="hl-the">the</span> <b>deaf</b>, <span class="hl-the">the</span> <b>poor</b><br>
+          • Глава государства (без имени): <span class="hl-the">the</span> <b>President</b>, <span class="hl-the">the</span> <b>Queen of Spain</b>
+        </p>
+      </div>
+    </div>
+
+    <!-- Music vs Sports + Unique & History -->
+    <div class="vs-grid" style="margin-bottom:0">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • Спорт, игры, языки (без слова language)</span>
+        <h4>🏀 Играть в спорт / Говорить на языке</h4>
+        <p style="font-size:13px;margin-top:6px;">
+          • Спорт: <i>He's good at <span class="hl-zero">Ø</span> <b>basketball</b>.</i><br>
+          • Язык: <i>She speaks <span class="hl-zero">Ø</span> <b>Italian</b> very well.</i><br>
+          <small style="color:var(--muted)"><i>(НО: <b>the</b> Italian <b>language</b> — если есть слово language!)</i></small>
+        </p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Музыкальные инструменты, Космос, История</span>
+        <h4>🎻 Инструменты + Единственное в своём роде</h4>
+        <p style="font-size:13px;margin-top:6px;">
+          • Музыка: <i>to play <span class="hl-the">the</span> <b>guitar / violin</b></i><br>
+          • Уникальные объекты: <span class="hl-the">the</span> <b>moon</b>, <span class="hl-the">the</span> <b>sky</b>, <span class="hl-the">the</span> <b>Sun</b><br>
+          • Исторические события: <span class="hl-the">the</span> <b>Hundred Years' War</b>, <span class="hl-the">the</span> <b>Chinese Cultural Revolution</b>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 5 & 6: PURPOSE VS BUILDING + ZERO ARTICLE EVERYDAY -->
+  <div class="section-block" data-sec="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Учреждения («Цель vs. Здание») и бытовые категории без артикля (Ø)</div>
+      <div class="section-sub">Страницы 3–4 учебника</div>
+    </div>
+
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">
+      Особые 8 слов: <b>school, university, college, court, hospital, prison, church, bed</b>
+    </p>
+
+    <div class="vs-grid">
+      <div class="vs-box left-zero">
+        <span class="tag tag-zero">Ø • По прямому назначению (Роль / Цель)</span>
+        <h4>🎯 Зачем это место создано? (учиться, лечиться, спать)</h4>
+        <div class="example-box ex-zero">
+          <i>He's been in <span class="hl-zero">Ø</span> <b>hospital</b> for two weeks.</i><br>
+          <small style="color:var(--muted)">(= Он лежит там как <b>пациент</b> на лечении)</small>
+        </div>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box right-the">
+        <span class="tag tag-the">THE • Само здание или ориентир</span>
+        <h4>🏥 Физический объект / визит гостя</h4>
+        <div class="example-box ex-the">
+          <i>They've taken him to <span class="hl-the">the</span> <b>hospital</b> near his house.</i><br>
+          <small style="color:var(--muted)">(= Конкретное <b>здание</b> больницы рядом с домом)</small>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="margin: 18px 0 8px; font-size: 15px;">🌿 Всегда без артикля (<span class="hl-zero">Ø</span>) в общем значении:</h4>
+    <div class="mini-cards">
+      <div class="mini-card" style="background:var(--zero-bg);border-color:var(--zero-border)">
+        <strong style="color:var(--zero-color)">📅 Календарь и праздники</strong>
+        Дни недели, месяцы, праздники<br>
+        <i>Monday, July, Christmas</i>
+      </div>
+      <div class="mini-card" style="background:var(--zero-bg);border-color:var(--zero-border)">
+        <strong style="color:var(--zero-color)">🍽️ Еда и напитки</strong>
+        Названия блюд и напитков<br>
+        <i>tea, coffee, pasta</i>
+      </div>
+      <div class="mini-card" style="background:var(--zero-bg);border-color:var(--zero-border)">
+        <strong style="color:var(--zero-color)">🎨 Цвета и игры</strong>
+        Цвета, виды спорта, игры<br>
+        <i>blue, basketball, chess</i>
+      </div>
+      <div class="mini-card" style="background:var(--zero-bg);border-color:var(--zero-border)">
+        <strong style="color:var(--zero-color)">🗣️ Языки (без слова language)</strong>
+        <i>speak <span class="hl-zero">Ø</span> Italian</i><br>
+        (НО: <i><span class="hl-the">the</span> Italian language</i>)
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function filterSections(sec, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section-block').forEach(block => {
+      if (sec === 'all' || block.getAttribute('data-sec') === sec) {
+        block.style.display = 'block';
+      } else {
+        block.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>
